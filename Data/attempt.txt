@@ -1,1 +1,0 @@
-attemptId|userId|quizId|score|status
