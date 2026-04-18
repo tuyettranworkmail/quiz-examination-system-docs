@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "x64\\Debug\\IQUIZSERVICE.obj",
+            "outputs": [
+                "x64\\Debug\\IQUIZSERVICE.h_62FEAF2B3065AB0C.ifc.dt.module.json",
+                "x64\\Debug\\IQUIZSERVICE.h_62FEAF2B3065AB0C.ifc.dt.d.json",
+                "x64\\Debug\\IQUIZSERVICE.h.ifc"
+            ],
+            "provides": [
+                {
+                    "logical-name": "C:\\Users\\THUNGUYEN\\Project_cnpm\\QuestionManagement\\QuestionManagement\\IQUIZSERVICE.h",
+                    "source-path": "c:\\users\\thunguyen\\project_cnpm\\questionmanagement\\questionmanagement\\iquizservice.h",
+                    "lookup-method": "absolute"
+                }
+            ],
+            "requires": []
+        }
+    ]
+}

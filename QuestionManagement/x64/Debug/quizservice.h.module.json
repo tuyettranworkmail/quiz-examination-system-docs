@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "x64\\Debug\\QUIZSERVICE.h.obj",
+            "outputs": [
+                "C:\\Users\\THUNGUYEN\\Project_cnpm\\QuestionManagement\\QuestionManagement\\x64\\Debug\\vc145.pdb",
+                "x64\\Debug\\",
+                "C:\\Users\\THUNGUYEN\\Project_cnpm\\QuestionManagement\\QuestionManagement\\x64\\Debug\\QUIZSERVICE.h.ifc"
+            ],
+            "provides": [
+                {
+                    "logical-name": "QUIZSERVICE.h",
+                    "source-path": "c:\\users\\thunguyen\\project_cnpm\\questionmanagement\\questionmanagement\\quizservice.h",
+                    "lookup-method": "absolute"
+                }
+            ],
+            "requires": []
+        }
+    ]
+}

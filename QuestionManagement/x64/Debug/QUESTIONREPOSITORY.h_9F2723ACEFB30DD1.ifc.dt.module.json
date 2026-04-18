@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "x64\\Debug\\QUESTIONREPOSITORY.obj",
+            "outputs": [
+                "x64\\Debug\\QUESTIONREPOSITORY.h_9F2723ACEFB30DD1.ifc.dt.module.json",
+                "x64\\Debug\\QUESTIONREPOSITORY.h_9F2723ACEFB30DD1.ifc.dt.d.json",
+                "x64\\Debug\\QUESTIONREPOSITORY.h.ifc"
+            ],
+            "provides": [
+                {
+                    "logical-name": "C:\\Users\\THUNGUYEN\\Project_cnpm\\QuestionManagement\\QuestionManagement\\QUESTIONREPOSITORY.h",
+                    "source-path": "c:\\users\\thunguyen\\project_cnpm\\questionmanagement\\questionmanagement\\questionrepository.h",
+                    "lookup-method": "absolute"
+                }
+            ],
+            "requires": []
+        }
+    ]
+}

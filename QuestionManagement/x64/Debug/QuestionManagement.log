@@ -1,0 +1,37 @@
+﻿  Scanning sources for module dependencies...
+  QUIZSERVICE.h
+  Compiling...
+  QUIZSERVICE.h
+  QuestionManagement.cpp
+  QUESTIONSERVICE.cpp
+C:\Users\THUNGUYEN\Project_cnpm\QuestionManagement\QuestionManagement\QuestionManagement.cpp(11,9): error C2065: 'QuizService': undeclared identifier
+C:\Users\THUNGUYEN\Project_cnpm\QuestionManagement\QuestionManagement\QuestionManagement.cpp(11,21): error C2146: syntax error: missing ';' before identifier 'quizService'
+C:\Users\THUNGUYEN\Project_cnpm\QuestionManagement\QuestionManagement\QuestionManagement.cpp(11,21): error C2065: 'quizService': undeclared identifier
+C:\Users\THUNGUYEN\Project_cnpm\QuestionManagement\QuestionManagement\QuestionManagement.cpp(16,21): error C2065: 'quizService': undeclared identifier
+C:\Users\THUNGUYEN\Project_cnpm\QuestionManagement\QuestionManagement\QuestionManagement.cpp(16,19): error C2512: 'Quiz': no appropriate default constructor available
+      C:\Users\THUNGUYEN\Project_cnpm\QuestionManagement\QuestionManagement\QUIZSERVICE.h(6,7):
+      see declaration of 'Quiz'
+  
+C:\Users\THUNGUYEN\Project_cnpm\QuestionManagement\QuestionManagement\QuestionManagement.cpp(43,9): error C2065: 'quizService': undeclared identifier
+C:\Users\THUNGUYEN\Project_cnpm\QuestionManagement\QuestionManagement\QuestionManagement.cpp(46,14): error C2065: 'quizService': undeclared identifier
+C:\Users\THUNGUYEN\Project_cnpm\QuestionManagement\QuestionManagement\QUESTIONSERVICE.cpp(62,27): error C2601: 'QuestionService::setCorrectAnswer': local function definitions are illegal
+      C:\Users\THUNGUYEN\Project_cnpm\QuestionManagement\QuestionManagement\QUESTIONSERVICE.cpp(42,67):
+      this line contains a '{' which has not yet been matched
+  
+C:\Users\THUNGUYEN\Project_cnpm\QuestionManagement\QuestionManagement\QUESTIONSERVICE.cpp(83,1): error C2059: syntax error: '}'
+C:\Users\THUNGUYEN\Project_cnpm\QuestionManagement\QuestionManagement\QUESTIONSERVICE.cpp(83,1): error C2143: syntax error: missing ';' before '}'
+C:\Users\THUNGUYEN\Project_cnpm\QuestionManagement\QuestionManagement\QUESTIONSERVICE.cpp(86,59): error C2143: syntax error: missing ';' before '{'
+C:\Users\THUNGUYEN\Project_cnpm\QuestionManagement\QuestionManagement\QUESTIONSERVICE.cpp(86,59): error C2447: '{': missing function header (old-style formal list?)
+  QUIZSERVICE.cpp
+C:\Users\THUNGUYEN\Project_cnpm\QuestionManagement\QuestionManagement\QUIZSERVICE.cpp(5,6): error C2653: 'QuizService': is not a class or namespace name
+C:\Users\THUNGUYEN\Project_cnpm\QuestionManagement\QuestionManagement\QUIZSERVICE.cpp(18,6): error C2653: 'QuizService': is not a class or namespace name
+C:\Users\THUNGUYEN\Project_cnpm\QuestionManagement\QuestionManagement\QUIZSERVICE.cpp(23,6): error C2653: 'QuizService': is not a class or namespace name
+C:\Users\THUNGUYEN\Project_cnpm\QuestionManagement\QuestionManagement\QUIZSERVICE.cpp(28,14): error C2662: 'std::vector<Question,std::allocator<Question>> &Quiz::getQuestions(void)': cannot convert 'this' pointer from 'const Quiz' to 'Quiz &'
+      C:\Users\THUNGUYEN\Project_cnpm\QuestionManagement\QuestionManagement\QUIZSERVICE.cpp(28,9):
+      Conversion loses qualifiers
+      C:\Users\THUNGUYEN\Project_cnpm\QuestionManagement\QuestionManagement\QuizService.h(26,28):
+      see declaration of 'Quiz::getQuestions'
+      C:\Users\THUNGUYEN\Project_cnpm\QuestionManagement\QuestionManagement\QUIZSERVICE.cpp(28,14):
+      while trying to match the argument list '()'
+  
+  Generating Code...

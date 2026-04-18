@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "x64\\Debug\\ANSWERSERVICE.obj",
+            "outputs": [
+                "x64\\Debug\\ANSWERSERVICE.h_2A1F1805BA1555BE.ifc.dt.module.json",
+                "x64\\Debug\\ANSWERSERVICE.h_2A1F1805BA1555BE.ifc.dt.d.json",
+                "x64\\Debug\\ANSWERSERVICE.h.ifc"
+            ],
+            "provides": [
+                {
+                    "logical-name": "C:\\Users\\THUNGUYEN\\Project_cnpm\\QuestionManagement\\QuestionManagement\\ANSWERSERVICE.h",
+                    "source-path": "c:\\users\\thunguyen\\project_cnpm\\questionmanagement\\questionmanagement\\answerservice.h",
+                    "lookup-method": "absolute"
+                }
+            ],
+            "requires": []
+        }
+    ]
+}

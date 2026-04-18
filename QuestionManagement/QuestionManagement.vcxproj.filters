@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\models">
+      <UniqueIdentifier>{13fbeb79-1918-4c97-b8e7-c93efa3c9310}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\services">
+      <UniqueIdentifier>{269a6a05-333e-4496-b37e-49666e1bd494}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\interface">
+      <UniqueIdentifier>{788d7436-1b3c-4cc6-ba3a-add60e932c55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\config/repositories">
+      <UniqueIdentifier>{c65f99a9-63e9-4e9c-a590-de7da4f40938}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\services">
+      <UniqueIdentifier>{be99598c-0591-4e16-b36d-df64a656bef3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="QuestionManagement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QUESTIONSERVICE.cpp">
+      <Filter>Source Files\services</Filter>
+    </ClCompile>
+    <ClCompile Include="QUIZSERVICE.h">
+      <Filter>Header Files\services</Filter>
+    </ClCompile>
+    <ClCompile Include="QUIZSERVICE.cpp">
+      <Filter>Source Files\services</Filter>
+    </ClCompile>
+    <ClCompile Include="ANSWERSERVICE.h">
+      <Filter>Header Files\services</Filter>
+    </ClCompile>
+    <ClCompile Include="ANSWERSERVICE.cpp">
+      <Filter>Source Files\services</Filter>
+    </ClCompile>
+    <ClCompile Include="IQUIZSERVICE.h">
+      <Filter>Header Files\interface</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="QUIZ.h">
+      <Filter>Header Files\models</Filter>
+    </ClInclude>
+    <ClInclude Include="QUESTION.h">
+      <Filter>Header Files\models</Filter>
+    </ClInclude>
+    <ClInclude Include="ANSWER.h">
+      <Filter>Header Files\models</Filter>
+    </ClInclude>
+    <ClInclude Include="QUESTIONSERVICE.h">
+      <Filter>Header Files\services</Filter>
+    </ClInclude>
+    <ClInclude Include="IQUESTIONSERVICE.h">
+      <Filter>Header Files\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="IANSWERSERVICE.h">
+      <Filter>Header Files\interface</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

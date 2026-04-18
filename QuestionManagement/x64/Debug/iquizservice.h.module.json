@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "x64\\Debug\\IQUIZSERVICE.h.obj",
+            "outputs": [
+                "C:\\Users\\THUNGUYEN\\Project_cnpm\\QuestionManagement\\QuestionManagement\\x64\\Debug\\vc145.pdb",
+                "x64\\Debug\\",
+                "C:\\Users\\THUNGUYEN\\Project_cnpm\\QuestionManagement\\QuestionManagement\\x64\\Debug\\IQUIZSERVICE.h.ifc"
+            ],
+            "provides": [
+                {
+                    "logical-name": "IQUIZSERVICE.h",
+                    "source-path": "c:\\users\\thunguyen\\project_cnpm\\questionmanagement\\questionmanagement\\iquizservice.h",
+                    "lookup-method": "absolute"
+                }
+            ],
+            "requires": []
+        }
+    ]
+}
