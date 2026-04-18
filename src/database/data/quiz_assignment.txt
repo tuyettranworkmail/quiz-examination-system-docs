@@ -1,1 +1,2 @@
-id|quizId|userId
+id|quizId|userId|startTime|endTime
+1|1|2|2026-04-18 08:00|2026-04-18 09:00
