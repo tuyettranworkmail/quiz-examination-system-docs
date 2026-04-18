@@ -1,47 +1,50 @@
 #pragma once
+
 #include "INotificationRepository.h"
 #include <vector>
-
-using namespace std;
 
 class NotificationRepositoryMemory : public INotificationRepository
 {
 private:
-    vector<Notification> notifications;
+    std::vector<Notification> notifications;
 
 public:
 
     // thêm notification
-    void add(Notification notification)
+    bool add(const Notification& notification)
     {
         notifications.push_back(notification);
+        return true;
     }
 
     // lấy theo user
-    vector<Notification> getByUserId(int userId)
-    {
-        vector<Notification> result;
+    std::vector<Notification> getByUserId(int userId) const override
+   {
+        std::vector<Notification> result;
 
-        for (Notification n : notifications)
+        for (const Notification& n : notifications)
         {
             if (n.user_id == userId)
             {
-                result.push_back(n);
+            result.push_back(n);
             }
         }
 
         return result;
-    }
+   }
 
     // mark read
-    void markAsRead(int id)
+    bool markAsRead(int id)
     {
-        for (Notification &n : notifications)
+        for (Notification& n : notifications)
         {
             if (n.notification_id == id)
             {
                 n.is_read = true;
+                return true;
             }
         }
+
+        return false;
     }
 };

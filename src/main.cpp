@@ -1,75 +1,54 @@
 #include <iostream>
+#include <vector>
 
-#include "Repositories/UserRepositoryMemory.h"
-#include "Repositories/NotificationRepositoryMemory.h"
-
-#include "Services/AuthService.h"
-#include "Services/NotificationService.h"
-
-using namespace std;
+#include "repositories/UserRepositoryMemory.h"
+#include "repositories/NotificationRepositoryMemory.h"
+#include "services/AuthService.h"
+#include "services/NotificationService.h"
+#include "models/User.h"
+#include "models/Notification.h"
+#include "utils/PasswordHasher.h"
 
 int main()
 {
-    // tạo repository
-    UserRepositoryMemory userRepo;
-    NotificationRepositoryMemory notificationRepo;
-
-    // tạo service
-    AuthService authService(&userRepo);
-    NotificationService notificationService(&notificationRepo);
-
-    // =========================
-    // TEST REGISTER
-    // =========================
-
-    User user1(1, "john", "john@gmail.com", "123", "student", true);
-
-    authService.registerUser(user1);
-
-    cout << "Register success" << endl;
-
-
-    // =========================
-    // TEST LOGIN
-    // =========================
-
-    User loginUser =
-        authService.login("john", "123");
-
-    cout << "Login success: "
-         << loginUser.username << endl;
-
-
-    // =========================
-    // TEST SEND NOTIFICATION
-    // =========================
-
-    Notification n1(1, 1, "Welcome to system");
-
-    notificationService.createNotification(n1);
-
-
-    // =========================
-    // TEST VIEW NOTIFICATION
-    // =========================
-
-    vector<Notification> list =
-        notificationService.getNotifications(1);
-
-    for (Notification n : list)
+    try
     {
-        cout << "Notification: "
-             << n.content << endl;
+        UserRepositoryMemory userRepo;
+        NotificationRepositoryMemory notificationRepo;
+        AuthService authService(&userRepo);
+        NotificationService notificationService(&notificationRepo);
+        // REGISTER
+        User user1(1, "nam anh", "john@gmail.com",
+                    "123456",
+                    "student", true);
+        authService.registerUser(user1);
+        std::cout << "Register success\n";
+        // LOGIN
+        User loginUser =
+            authService.login("nam anh", "123456");
+        std::cout << "Login success: "
+                << loginUser.username << "\n";
+        // SEND NOTIFICATION
+        Notification n1(1, 1, "Welcome to system");
+        notificationService.sendNotification(n1);
+        // VIEW NOTIFICATION
+        std::vector<Notification> list =
+            notificationService.getNotifications(1);
+        for (const Notification& n : list)
+        {
+            std::cout << "Notification: "
+                    << n.content
+                    << " | Read: "
+                    << (n.is_read ? "Yes" : "No")
+                    << "\n";
+        }
+        // MARK READ
+        notificationService.markAsRead(1);
+        std::cout << "Notification marked as read\n";
     }
-
-
-    // =========================
-    // TEST MARK READ
-    // =========================
-
-    notificationService.markAsRead(1);
-
-    cout << "Notification marked as read" << endl;
-
+    catch (const std::exception& e)
+    {
+        std::cout << "Error: " << e.what() << "\n";
+    }
     return 0;
 }

@@ -1,45 +1,48 @@
 #pragma once
-#include <string>
 
-using namespace std;
+#include <string>
 
 // Class User theo UML
 class User
 {
 public:
 
-    int user_id;        // id user
-    string username;    // username
-    string email;       // email
-    string password;    // password
-    string role;        // role
-    bool is_active;     // trạng thái hoạt động
+    int user_id = 0;
+    std::string username;
+    std::string email;
+    std::string password;
+    std::string role;
+    bool is_active = false;
 
     // constructor rỗng
-    User() {}
+    User() = default;
 
     // constructor đầy đủ
-    User(int id, string username, string email,
-        string password, string role, bool active)
-    {
-        this->user_id = id;
-        this->username = username;
-        this->email = email;
-        this->password = password;
-        this->role = role;
-        this->is_active = active;
-    }
+    User(int id,
+        const std::string& username,
+        const std::string& email,
+        const std::string& password,
+        const std::string& role,
+        bool active)
+        : user_id(id),
+        username(username),
+        email(email),
+        password(password),
+        role(role),
+        is_active(active)
+    {}
 
     // update profile
-    void updateProfile(string email, string role)
+    void updateProfile(const std::string& newEmail,
+                    const std::string& newRole)
     {
-        this->email = email;
-        this->role = role;
+        email = newEmail;
+        role = newRole;
     }
 
     // change password
-    void changePassword(string newPassword)
+    void changePassword(const std::string& newPassword)
     {
-        this->password = newPassword;
+        password = newPassword;
     }
 };

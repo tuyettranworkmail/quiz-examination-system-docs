@@ -2,15 +2,42 @@
 
 #include "../Models/User.h"
 #include "../Repositories/IUserRepository.h"
+#include "../utils/Validator.h"
+#include <stdexcept>
 
-// UserService xử lý:
-// Manage profile
-// Change password
 class UserService
 {
 private:
-
     IUserRepository* userRepository;
+
+    // =====================
+    // BUSINESS LOGIC
+    // =====================
+    User getUserInternal(int id)
+    {
+        User user = userRepository->getById(id);
+
+        if (user.user_id == 0)
+        {
+            throw std::runtime_error("User not found");
+        }
+
+        return user;
+    }
+
+    bool updateProfileInternal(const User& user)
+    {
+        return userRepository->update(user);
+    }
+
+    bool changePasswordInternal(int userId, const std::string& newPassword)
+    {
+        User user = getUserInternal(userId);
+
+        user.password = newPassword;
+
+        return userRepository->update(user);
+    }
 
 public:
 
@@ -19,37 +46,45 @@ public:
         userRepository = repo;
     }
 
-    // ========================
+    // =====================
+    // HANDLER
+    // =====================
+
     // GET USER PROFILE
-    // ========================
     User getUser(int id)
     {
-        return userRepository->getById(id);
+        if (id <= 0)
+        {
+            throw std::runtime_error("Invalid id");
+        }
+
+        return getUserInternal(id);
     }
 
-    // ========================
     // UPDATE PROFILE
-    // ========================
-    bool updateProfile(User user)
+    bool updateProfile(const User& user)
     {
-        userRepository->update(user);
-        return true;
+        if (user.user_id <= 0)
+        {
+            throw std::runtime_error("Invalid user");
+        }
+
+        return updateProfileInternal(user);
     }
 
-    // ========================
     // CHANGE PASSWORD
-    // ========================
-    bool changePassword(int userId, string newPassword)
+    bool changePassword(int userId, const std::string& newPassword)
     {
-        // lấy user
-        User user = userRepository->getById(userId);
+        if (userId <= 0)
+        {
+            throw std::runtime_error("Invalid userId");
+        }
 
-        // đổi password
-        user.password = newPassword;
+        if (!Validator::isValidPassword(newPassword))
+        {
+            throw std::runtime_error("Weak password");
+        }
 
-        // update
-        userRepository->update(user);
-
-        return true;
+        return changePasswordInternal(userId, newPassword);
     }
 };

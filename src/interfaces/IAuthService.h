@@ -1,15 +1,18 @@
 #pragma once
+
+#include <string>
 #include "../Models/User.h"
 
 // Interface AuthService
-// Service xử lý logic nghiệp vụ
 class IAuthService
 {
 public:
+    virtual ~IAuthService() = default;
 
     // đăng nhập
-    virtual User login(string username, string password) = 0;
+    virtual User login(const std::string& username,
+                        const std::string& password) = 0;
 
     // đăng ký
-    virtual bool registerUser(User user) = 0;
+    virtual bool registerUser(const User& user) = 0;
 };

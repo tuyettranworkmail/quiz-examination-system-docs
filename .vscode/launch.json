@@ -11,7 +11,7 @@
       "stopAtEntry": false,
       "externalConsole": true,
       "cwd": "d:/project2/quiz-examination-system-docs",
-      "program": "d:/project2/quiz-examination-system-docs/build/Debug/outDebug",
+      "program": "d:/project2/quiz-examination-system-docs/quiz.exe",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

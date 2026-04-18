@@ -1,30 +1,32 @@
 #pragma once
+
 #include <string>
 #include <ctime>
-
-using namespace std;
 
 // Notification class theo UML
 class Notification
 {
 public:
 
-    int notification_id;
-    int user_id;
-    string content;
-    time_t created_at;
-    bool is_read;
+    int notification_id = 0;
+    int user_id = 0;
+    std::string content;
+    std::time_t created_at = 0;
+    bool is_read = false;
 
-    Notification() {}
+    // constructor rỗng
+    Notification() = default;
 
-    Notification(int id, int userId, string content)
-    {
-        this->notification_id = id;
-        this->user_id = userId;
-        this->content = content;
-        this->created_at = time(0);
-        this->is_read = false;
-    }
+    // constructor đầy đủ
+    Notification(int id,
+                 int userId,
+                 const std::string& content)
+        : notification_id(id),
+          user_id(userId),
+          content(content),
+          created_at(std::time(nullptr)),
+          is_read(false)
+    {}
 
     // mark read
     void markAsRead()
