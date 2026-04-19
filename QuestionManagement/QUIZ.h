@@ -24,6 +24,11 @@ public:
         return title;
     }
 
+    // thêm getter description
+    const std::string& getDescription() const {
+        return description;
+    }
+
     int getTimeLimit() const {
         return timeLimit;
     }
@@ -39,6 +44,7 @@ public:
     void addQuestion(const Question& q) {
         questions.push_back(q);
     }
+
     void removeQuestion(int questionId) {
         for (auto it = questions.begin(); it != questions.end(); ++it) {
             if (it->getQuestionId() == questionId) {

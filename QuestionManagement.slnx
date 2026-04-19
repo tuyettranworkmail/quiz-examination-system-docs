@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="QuestionManagement/QuestionManagement.vcxproj" />
+  <Project Path="QuestionManagement/QuestionManagement.vcxproj" Id="2eacdcf1-381a-46b7-9487-52355086931b" />
 </Solution>
