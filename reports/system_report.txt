@@ -1,0 +1,9 @@
+Quiz Examination System - System Report
+
+Generated Date: Apr 19 2026
+
+Statistics:
+Total Users: 3
+Total Quizzes: 1
+Total Questions: 2
+Total Attempts: 1
