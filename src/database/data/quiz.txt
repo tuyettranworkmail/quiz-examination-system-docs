@@ -1,1 +1,3 @@
 quizId|title|description
+1|Math Quiz|Basic math questions
+2|English Quiz|Basic English questions

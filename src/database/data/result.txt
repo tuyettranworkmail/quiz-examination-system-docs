@@ -1,1 +1,2 @@
 resultId|attemptId|score
+1|1|10

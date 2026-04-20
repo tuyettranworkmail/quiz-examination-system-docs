@@ -1,2 +1,5 @@
 id|username|email|password|role
 1|admin|admin@gmail.com|123|admin
+2|student1|s1@gmail.com|123|student
+3|student2|s2@gmail.com|123|student
+99|testuser|test@gmail.com|123|student
