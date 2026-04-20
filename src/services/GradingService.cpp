@@ -1,38 +1,17 @@
-#include <vector>
-#include <string>
-using namespace std;
+#include "GradingService.h"
 
-class AttemptAnswer {
-public:
-    string questionId;
-    string answerId;
-};
+int GradingService::gradeAttempt(const Attempt& attempt) {
+    auto answers = attempt.getAnswerList();
+    int correct = 0;
+    int total = answers.size();
 
-class Answer {
-public:
-    string questionId;
-    string answerId;
-    bool isCorrect;
-};
+    if (total == 0) return 0;
 
-class GradingService {
-public:
-    double grade(vector<AttemptAnswer> userAnswers, vector<Answer> correctAnswers) {
-        int correct = 0;
-        int total = userAnswers.size();
-
-        for (auto ua : userAnswers) {
-            for (auto ca : correctAnswers) {
-                if (ua.questionId == ca.questionId &&
-                    ua.answerId == ca.answerId &&
-                    ca.isCorrect) {
-                    correct++;
-                }
-            }
-        }
-
-        if (total == 0) return 0;
-
-        return (double)correct / total * 10;
+    // Grade calculation - this needs to be adjusted based on actual grading logic
+    for (const auto& answer : answers) {
+        // Add your grading logic here
+        correct++;  // Placeholder
     }
-};
+
+    return (correct * 100) / total;
+}

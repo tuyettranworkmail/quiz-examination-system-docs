@@ -1,0 +1,4 @@
+User ID,Username,Email,Role,Active
+1,mr_smith,smith@example.com,teacher,Yes
+2,alice,alice@example.com,student,Yes
+3,bob,bob@example.com,student,Yes

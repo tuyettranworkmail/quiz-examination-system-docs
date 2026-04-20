@@ -6,7 +6,7 @@
 
 using namespace std;
 
-// Mock GradingService 
+// Mock GradingService
 class MockGradingService : public IGradingService
 {
 public:
