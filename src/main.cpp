@@ -319,6 +319,11 @@ void takeQuiz(User user,
         cout<<"ERROR: Quiz not found\n";
         return;
     }
+    if(!quiz->isActive)
+    {
+        cout<<"ERROR: Quiz is not active\n";
+        return;
+    }
     
     // FR-14: Check attempt limit
     if(userAttemptCount[user.user_id] >=3)
@@ -413,7 +418,9 @@ void takeQuiz(User user,
     record.maxScore = maxScore;
     record.attemptCount = userAttemptCount[user.user_id];
     time_t now = time(0);
-    record.submissionTime = ctime(&now); // Current time
+    string timeStr = ctime(&now);
+    timeStr.pop_back(); // remove newline
+    record.submissionTime = timeStr;
     
     attemptRecords.push_back(record);
     
@@ -445,7 +452,7 @@ void viewResults(const User& user)
     for(const auto& record : userRecords)
     {
         auto quiz = find_if(quizzes.begin(), quizzes.end(),
-                           [record](const Quiz& q){ return q.id == record.quizId; });
+                        [record](const Quiz& q){ return q.id == record.quizId; });
         
         cout<<"\nAttempt #"<<record.attemptCount<<"\n";
         if(quiz != quizzes.end())
@@ -731,6 +738,7 @@ int main()
                 cout<<"User ID: ";
                 cin>>id;
                 cin.ignore();
+                
 
                 cout<<"Username: ";
                 getline(cin,username);

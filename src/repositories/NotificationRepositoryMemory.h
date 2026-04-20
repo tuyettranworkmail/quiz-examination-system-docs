@@ -11,7 +11,7 @@ private:
 public:
 
     // thêm notification
-    bool add(const Notification& notification)
+    bool add(const Notification& notification) override
     {
         notifications.push_back(notification);
         return true;
@@ -46,5 +46,9 @@ public:
         }
 
         return false;
+    }
+    std::vector<Notification> getAll() const
+    {
+        return notifications;
     }
 };
