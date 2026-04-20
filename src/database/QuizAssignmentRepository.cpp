@@ -46,4 +46,31 @@ public:
 
         return list;
     }
+
+    void add(QuizAssignment q) {
+        string line = q.id + "|" + q.quizId + "|" + q.userId + "|" + q.startTime + "|" + q.endTime;
+        fileConnector.appendLine(path, line);
+    }
+
+    void update(QuizAssignment q) {
+        string line = q.id + "|" + q.quizId + "|" + q.userId + "|" + q.startTime + "|" + q.endTime;
+        fileConnector.updateById(path, q.id, line);
+    }
+
+    void remove(string id) {
+        fileConnector.deleteById(path, id);
+    }
+
+    vector<QuizAssignment> findByUserId(string userId) {
+        vector<QuizAssignment> result;
+        vector<QuizAssignment> list = getAll();
+
+        for (auto q : list) {
+            if (q.userId == userId) {
+                result.push_back(q);
+            }
+        }
+
+        return result;
+    }
 };
