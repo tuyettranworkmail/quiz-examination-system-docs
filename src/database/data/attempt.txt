@@ -1,1 +1,2 @@
 attemptId|userId|quizId|score|status
+1|2|1|0|in_progress
