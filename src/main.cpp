@@ -21,7 +21,8 @@
 #include "../QuizAttemptService/QuizAttemptService/ATTEMPTSERVICE.h"
 #include "../QuizAttemptService/QuizAttemptService/RESULTSERVICE.h"
 
-#include "repositories/QuizAssignmentRepository.h"
+#include "models/QuizAssignment.h"
+#include "database/QuizAssignmentRepository.cpp"
 
 using namespace std;
 using namespace std::chrono;
@@ -144,11 +145,11 @@ void teacherMenu()
     cout<<"3. View Questions\n";
     cout<<"4. Edit Question\n";
     cout<<"5. Delete Question\n";
-    cout<<"6. Manage Quizzes\n";
-    cout<<"7. View Quiz Results\n";
-    cout<<"8. Send Notification\n";
-    cout<<"9. Change Password\n";
-    cout<<"10. Assign Quiz to Student\n";
+    cout<<"6. Assign Quiz to Student\n";
+    cout<<"7. Manage Quizzes\n";
+    cout<<"8. View Quiz Results\n";
+    cout<<"9. Send Notification\n";
+    cout<<"10. Change Password\n";
     cout<<"11. Logout\n";
     cout<<"=========================\n";
 }
@@ -345,6 +346,25 @@ void takeQuiz(User user,
     if(quiz == quizzes.end())
     {
         cout<<"ERROR: Quiz not found\n";
+        return;
+    }
+    // ===== FR-13 LINK CHECK =====
+    auto assignments = quizAssignmentRepo.findByUserId(to_string(user.user_id));
+
+    bool allowed = false;
+
+    for (auto& a : assignments)
+    {
+        if (stoi(a.quizId) == quizId)
+        {
+            allowed = true;
+            break;
+        }
+    }
+
+    if (!allowed)
+    {
+        cout << "ERROR: You are not assigned to this quiz (FR-13 restriction)\n";
         return;
     }
     
@@ -735,6 +755,41 @@ void deleteQuestion(const User& teacher)
 
     quizQuestions.erase(it);
 }
+// FR-13: Assign Quiz to Student
+void assignQuiz(QuizAssignmentRepository& repo)
+{
+    cout << "\n===== FR-13: QUIZ ASSIGNMENT =====\n";
+
+    QuizAssignment qa;
+
+    cout << "Assignment ID: ";
+    cin >> qa.id;
+
+    cout << "Quiz ID: ";
+    cin >> qa.quizId;
+
+    cout << "User ID (Student): ";
+    cin >> qa.userId;
+
+    cin.ignore();
+
+    cout << "Start Time (YYYY-MM-DD HH:MM): ";
+    getline(cin, qa.startTime);
+
+    cout << "End Time (YYYY-MM-DD HH:MM): ";
+    getline(cin, qa.endTime);
+
+    // BR-13: validate time
+    if (qa.startTime >= qa.endTime)
+    {
+        cout << "ERROR: Invalid time range\n";
+        return;
+    }
+
+    repo.add(qa);
+
+    cout << "Quiz assigned successfully!\n";
+}
 
 // ============== MAIN APPLICATION ==============
 int main()
@@ -938,8 +993,43 @@ int main()
                     deleteQuestion(currentUser);
                     pauseScreen();
                 }
+				
+                else if (c == 6)
+                {
+                    QuizAssignment qa;
 
-                else if(c==6)
+                    cout << "Assignment ID: ";
+                    cin >> qa.id;
+
+                    cout << "Quiz ID: ";
+                    cin >> qa.quizId;
+
+                    cout << "User ID (Student): ";
+                    cin >> qa.userId;
+
+                    cin.ignore();
+
+                    cout << "Start Time: ";
+                    getline(cin, qa.startTime);
+
+                    cout << "End Time: ";
+                    getline(cin, qa.endTime);
+
+                    if (qa.startTime >= qa.endTime)
+                    {
+                        cout << "ERROR: Invalid time range\n";
+                        return;
+                    }
+
+                    quizAssignmentRepo.add(qa);
+
+                    cout << "Quiz assigned successfully!\n";
+                    pauseScreen();
+                }
+                    cout<<" Quiz assigned successfully!\n";
+                    pauseScreen();
+                }
+                else if(c==7)
                 {
                     cout<<"\nAvailable Quizzes:\n";
                     for(const auto& q : quizzes)
@@ -948,8 +1038,8 @@ int main()
                     }
                     pauseScreen();
                 }
-
-                else if(c==7)
+                
+                else if(c==8)
                 {
                     if(attemptRecords.empty())
                     {
@@ -966,7 +1056,7 @@ int main()
                     pauseScreen();
                 }
 
-                else if(c==8)
+                else if(c==9)
                 {
                     int userId;
                     string msg;
@@ -985,12 +1075,12 @@ int main()
                     pauseScreen();
                 }
 
-                else if(c==9){
+                else if(c==10){
                     changePassword(currentUser, authService);
                     pauseScreen();
                 }
 
-                else if(c==10)
+                else if(c==11)
                 {
                     logged=false;
                     cout<<" Logged out successfully\n";
