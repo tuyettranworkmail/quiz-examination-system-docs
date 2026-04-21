@@ -21,6 +21,8 @@
 #include "../QuizAttemptService/QuizAttemptService/ATTEMPTSERVICE.h"
 #include "../QuizAttemptService/QuizAttemptService/RESULTSERVICE.h"
 
+#include "repositories/QuizAssignmentRepository.h"
+
 using namespace std;
 using namespace std::chrono;
 
@@ -146,7 +148,8 @@ void teacherMenu()
     cout<<"7. View Quiz Results\n";
     cout<<"8. Send Notification\n";
     cout<<"9. Change Password\n";
-    cout<<"10. Logout\n";
+    cout<<"10. Assign Quiz to Student\n";
+    cout<<"11. Logout\n";
     cout<<"=========================\n";
 }
 
@@ -200,6 +203,18 @@ void createQuiz(const User& teacher)
     
     quizzes.push_back(newQuiz);
     cout<<"Quiz created successfully! Quiz ID: "<<id<<"\n";
+    FileConnector fc;
+
+    string line =
+        to_string(newQuiz.id) + "|" +
+        newQuiz.title + "|" +
+        newQuiz.description + "|" +
+        to_string(newQuiz.timeLimit) + "|" +
+        to_string(newQuiz.totalQuestions) + "|" +
+        (newQuiz.isActive ? "1" : "0") + "|" +
+        newQuiz.createdBy;
+
+    fc.appendLine("Data/quiz.txt", line);
 }
 
 // ============== FR-03: Question Management ==============
@@ -287,6 +302,19 @@ void createQuestion(const User& teacher)
     quiz->totalQuestions++;
     
     cout<<"Question created successfully!\n";
+    FileConnector fc;
+
+    string line =
+        to_string(q.id) + "|" +
+        q.text + "|" +
+        q.A + "|" +
+        q.B + "|" +
+        q.C + "|" +
+        q.D + "|" +
+        to_string(q.correct) + "|" +
+        to_string(q.quizId);
+
+    fc.appendLine("Data/question.txt", line);
 }
 
 // ============== FR-04 & FR-05: Take Quiz & Submit ==============
@@ -556,6 +584,13 @@ void editProfile(User& user)
         
         user.email = newEmail;
         cout<<"Email updated successfully!\n";
+        // ===== SAVE TO FILE =====
+        FileConnector fc;
+        fc.updateById(
+            "Data/user.txt",
+            to_string(user.user_id),
+            to_string(user.user_id) + "|" + user.username + "|" + user.email + "|" + user.password + "|" + user.role
+        );
     }
     else if(choice == 2)
     {
@@ -656,6 +691,19 @@ void editQuestion(const User& teacher)
         cin>>it->correct;
         cout<<"Updated!\n";
     }
+    FileConnector fc;
+
+    string newLine =
+        to_string(it->id) + "|" +
+        it->text + "|" +
+        it->A + "|" +
+        it->B + "|" +
+        it->C + "|" +
+        it->D + "|" +
+        to_string(it->correct) + "|" +
+        to_string(it->quizId);
+
+    fc.updateById("Data/question.txt", to_string(it->id), newLine);
 }
 
 // FR-18: Delete Question
@@ -682,6 +730,10 @@ void deleteQuestion(const User& teacher)
     }
     quizQuestions.erase(it);
     cout<<"Question deleted successfully!\n";
+    FileConnector fc;
+    fc.deleteById("Data/question.txt", to_string(questionId));
+
+    quizQuestions.erase(it);
 }
 
 // ============== MAIN APPLICATION ==============
@@ -689,6 +741,8 @@ int main()
 {
     UserRepositoryMemory userRepo;
     NotificationRepositoryMemory notificationRepo;
+
+    QuizAssignmentRepository quizAssignmentRepo;
 
     AuthService authService(&userRepo);
     UserService userService(&userRepo);

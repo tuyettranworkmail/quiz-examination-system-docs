@@ -1,4 +1,4 @@
-#pragma 
+#pragma once
 #ifndef ATTEMPTSERVICE_H
 #define ATTEMPTSERVICE_H   
 
@@ -6,7 +6,7 @@
 #include "ATTEMPTANSWER.h"
 #include "IGRADINGSERVICE.h"
 #include "RESULTSERVICE.h"
-
+#include <vector>
 class AttemptService
 {
 private:

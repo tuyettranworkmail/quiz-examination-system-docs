@@ -3,6 +3,7 @@
 #define ATTEMPT_H
 
 #include <vector>
+#include <string>
 #include "ATTEMPTANSWER.h"
 
 class Attempt
@@ -12,20 +13,18 @@ private:
     int userId;
     int quizId;
 
-    bool isSubmitted;   // đã nộp bài chưa
-    int score;          // điểm (do GradingService trả về)
+    bool isSubmitted;
+    int score;
 
-    std::vector<AttemptAnswer> answerList; // danh sách câu trả lời
+    std::vector<AttemptAnswer> answerList;
 
 public:
-    // Constructor
+    // ===================== CONSTRUCTOR =====================
     Attempt();
     Attempt(int atId, int uId, int qzId);
-
-    // Destructor
     ~Attempt();
 
-    // Getter
+    // ===================== GETTER =====================
     int getAttemptId() const;
     int getUserId() const;
     int getQuizId() const;
@@ -33,16 +32,36 @@ public:
     int getScore() const;
     std::vector<AttemptAnswer> getAnswerList() const;
 
-    // Setter
+    // ===================== SETTER =====================
     void setAttemptId(int id);
     void setUserId(int id);
     void setQuizId(int id);
     void setIsSubmitted(bool submitted);
     void setScore(int s);
 
-    // Business methods
-    void addAnswer(const AttemptAnswer& answer); // thêm câu trả lời
-    void submit();                               // nộp bài
+    // ===================== BUSINESS LOGIC =====================
+    void addAnswer(const AttemptAnswer& answer);
+    void submit();
+
+    // =========================================================
+    //  FILE HANDLING
+    // =========================================================
+
+    static std::vector<Attempt> loadFromFile(const std::string& path);
+
+    static void saveToFile(const std::string& path, const std::vector<Attempt>& list);
+
+    static void appendToFile(const std::string& path, const Attempt& a);
+
+    static void updateInFile(const std::string& path, const Attempt& a);
+
+    static void deleteFromFile(const std::string& path, int attemptId);
+
+    static std::vector<Attempt> findByUserId(const std::vector<Attempt>& list, int userId);
+
+    // convert giữa object ↔ string (rất quan trọng)
+    std::string toLine() const;
+    static Attempt fromLine(const std::string& line);
 };
 
 #endif
