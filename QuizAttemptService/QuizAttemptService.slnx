@@ -1,7 +1,0 @@
-<Solution>
-  <Configurations>
-    <Platform Name="x64" />
-    <Platform Name="x86" />
-  </Configurations>
-  <Project Path="QuizAttemptService/QuizAttemptService.vcxproj" Id="e2730225-cff8-4cea-9a8f-82fdd1ee7550" />
-</Solution>
