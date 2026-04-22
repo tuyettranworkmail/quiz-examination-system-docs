@@ -61,7 +61,7 @@ public:
     }
 
     // REGISTER (HANDLER)
-    bool registerUser(User user) // ✅ bỏ const để hash
+    bool registerUser(User user)
     {
         if (!Validator::isNotEmpty(user.username) ||
             !Validator::isValidPassword(user.password))
