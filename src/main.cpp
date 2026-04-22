@@ -12,7 +12,7 @@
 #include <limits>
 #include "repositories/UserRepositoryMemory.h"
 #include "repositories/NotificationRepositoryMemory.h"
-
+#include <ctime>
 
 #include "services/AuthService.h"
 #include "services/UserService.h"
@@ -236,7 +236,7 @@ void createQuiz(const User& teacher)
         }
     }
     cout<<"Quiz Title (required): ";
-    getline(cin, title);
+    getline(cin >> ws, title);
     if(title.empty())
     {
         cout<<"ERROR: Title is required\n";
@@ -244,7 +244,7 @@ void createQuiz(const User& teacher)
     }
    
     cout<<"Description: ";
-    getline(cin, description);
+    getline(cin >> ws, description);
    
     cout<<"Time Limit: ";
     timeLimit = getIntInput();
@@ -549,7 +549,7 @@ void changePassword(User& user, UserService& userService)
 
 
     cout<<"New Password: ";
-    cin>>newPassword;
+    getline(cin >> ws,newPassword);
 
 
     if(!isValidPassword(newPassword))
@@ -560,7 +560,7 @@ void changePassword(User& user, UserService& userService)
 
 
     cout<<"Confirm Password: ";
-    cin>>confirmPassword;
+    getline(cin >> ws, confirmPassword);
 
 
     if(newPassword != confirmPassword)
@@ -573,6 +573,7 @@ void changePassword(User& user, UserService& userService)
     try
     {
         userService.changePassword(user.user_id,newPassword);
+        user.password = newPassword;
         cout<<"Password changed successfully!\n";
     }
     catch(const exception& e)
@@ -606,7 +607,7 @@ void editProfile(User& user)
     {
         cout<<"New Email: ";
         string newEmail;
-        getline(cin, newEmail);
+        getline(cin >> ws, newEmail);
        
         if(!isValidEmail(newEmail))
         {
@@ -719,7 +720,7 @@ void editQuestion(const User& teacher)
     if(choice == 1)
     {
         cout<<"New question text: ";
-        getline(cin, it->text);
+        getline(cin >> ws, it->text);
         cout<<"Updated!\n";
     }
     else if(choice == 2)
@@ -823,11 +824,10 @@ int main()
 
                 cout<<"User ID: ";
                 id = getIntInput();
-               
 
 
                 cout<<"Username: ";
-                getline(cin,username);
+                getline(cin >> ws, username);
                
                 if(!isValidUsername(username))
                 {
@@ -892,11 +892,11 @@ int main()
 
 
                 cout<<"Username: ";
-                cin>>u;
+                getline(cin >> ws, u);
 
 
                 cout<<"Password: ";
-                cin>>p;
+                getline(cin, p);
 
 
                 try
@@ -909,7 +909,8 @@ int main()
                 }
                 catch(const exception& e)
                 {
-                    cout<<"ERROR: Login failed\n";
+                    cout<<"ERROR: "<<e.what()<<"\n";
+                    pauseScreen();
                 }
             }
         }
@@ -1040,10 +1041,11 @@ int main()
 
 
                     cout<<"Message: ";
-                    getline(cin,msg);
+                    getline(cin >> ws,msg);
 
 
-                    Notification n(0,userId,msg);
+                    int notificationId = notificationRepo.getAll().size() + 1;
+                    Notification n(notificationId,userId,msg);
                     notificationService.sendNotification(n);
                     cout<<" Notification sent!\n";
                     pauseScreen();
