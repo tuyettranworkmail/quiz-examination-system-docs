@@ -1,0 +1,1 @@
+id|userId|content|createdAt|isRead

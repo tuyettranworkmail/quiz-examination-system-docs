@@ -1,0 +1,2 @@
+id|username|email|password|role
+1|admin|admin@gmail.com|123|admin
