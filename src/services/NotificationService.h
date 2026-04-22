@@ -6,8 +6,6 @@
 #include <vector>
 #include <stdexcept>
 
-using namespace std;
-
 class NotificationService
 {
 private:
@@ -43,6 +41,9 @@ public:
 
     NotificationService(INotificationRepository* repo)
     {
+        if(repo == nullptr)
+            throw std::runtime_error("Repository cannot be null");
+
         repository = repo;
     }
 
