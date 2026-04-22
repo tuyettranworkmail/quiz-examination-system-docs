@@ -3,6 +3,7 @@
 #include "../Models/User.h"
 #include "../Repositories/IUserRepository.h"
 #include "../utils/Validator.h"
+#include "../utils/PasswordHasher.h"
 #include <stdexcept>
 
 class UserService
@@ -36,12 +37,12 @@ private:
     {
         User user = getUserInternal(userId);
 
-        if (user.password == newPassword)
+        if (PasswordHasher::verify(newPassword, user.password))
         {
             throw std::runtime_error("New password must be different from old password");
         }
 
-        user.password = newPassword;
+        user.password = PasswordHasher::hash(newPassword);
 
         return userRepository->update(user);
     }

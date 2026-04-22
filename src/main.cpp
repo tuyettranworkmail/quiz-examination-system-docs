@@ -13,16 +13,20 @@
 #include "repositories/UserRepositoryMemory.h"
 #include "repositories/NotificationRepositoryMemory.h"
 
+
 #include "services/AuthService.h"
 #include "services/UserService.h"
 #include "services/NotificationService.h"
 #include "services/GradingService.h"
 
+
 #include "../QuizAttemptService/QuizAttemptService/ATTEMPTSERVICE.h"
 #include "../QuizAttemptService/QuizAttemptService/RESULTSERVICE.h"
 
+
 using namespace std;
 using namespace std::chrono;
+
 
 void clearScreen()
 {
@@ -33,12 +37,61 @@ void clearScreen()
 #endif
 }
 
+
 void pauseScreen()
 {
     cout << "\nPress Enter to continue...";
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
     cin.get();
 }
+int getIntInput()
+{
+    int value;
+
+
+    while(true)
+    {
+        cin >> value;
+
+
+        if(cin.fail())
+        {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout<<"ERROR: Invalid input. Enter number: ";
+        }
+        else
+        {
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            return value;
+        }
+    }
+}
+
+
+int getIntRange(int min, int max)
+{
+    int value;
+
+
+    while(true)
+    {
+        value = getIntInput();
+
+
+        if(value < min || value > max)
+        {
+            cout<<"ERROR: Enter number between "
+                <<min<<" and "<<max<<": ";
+        }
+        else
+        {
+            return value;
+        }
+    }
+}
+
+
 
 
 // ============== FR-02: Quiz Structure ==============
@@ -51,6 +104,7 @@ struct Question
     int quizId;
 };
 
+
 struct Quiz
 {
     int id;
@@ -61,6 +115,7 @@ struct Quiz
     bool isActive;
     string createdBy;
 };
+
 
 struct QuizAttemptRecord
 {
@@ -73,11 +128,13 @@ struct QuizAttemptRecord
     int attemptCount;
 };
 
+
 // Global storage structures
 vector<Question> quizQuestions;
 vector<Quiz> quizzes;
 vector<QuizAttemptRecord> attemptRecords;
 map<int, int> userAttemptCount; // FR-14: Track attempt count per user
+
 
 // ============== FR-01: Validation Functions (BR-01, BR-02, BR-03) ==============
 bool isValidEmail(const string& email)
@@ -86,17 +143,20 @@ bool isValidEmail(const string& email)
     return regex_match(email, pattern);
 }
 
+
 bool isValidPassword(const string& password)
 {
     // BR-03: Password must be at least 8 characters
     return password.length() >= 8;
 }
 
+
 bool isValidUsername(const string& username)
 {
     // BR-01: Username must not be empty and at least 3 chars
     return !username.empty() && username.length() >= 3;
 }
+
 
 // ============== UI Menu Functions ==============
 void guestMenu()
@@ -109,6 +169,7 @@ void guestMenu()
     cout<<"================================\n";
 }
 
+
 void adminMenu()
 {
     cout<<"\n===== ADMIN MENU =====\n";
@@ -119,6 +180,7 @@ void adminMenu()
     cout<<"5. Logout\n";
     cout<<"======================\n";
 }
+
 
 void studentMenu()
 {
@@ -132,6 +194,7 @@ void studentMenu()
     cout<<"6. Logout\n";
     cout<<"========================\n";
 }
+
 
 void teacherMenu()
 {
@@ -150,18 +213,20 @@ void teacherMenu()
     cout<<"=========================\n";
 }
 
+
 // ============== FR-02: Quiz Management ==============
 void createQuiz(const User& teacher)
 {
     cout<<"\n----- CREATE NEW QUIZ -----\n";
-    
+   
     int id;
     string title, description;
     int timeLimit;
-    
+   
     cout<<"Quiz ID: ";
-    cin>>id;
-    cin.ignore();
+    id = getIntInput();
+
+
     for(const auto& q : quizzes)
     {
         if(q.id == id)
@@ -177,18 +242,18 @@ void createQuiz(const User& teacher)
         cout<<"ERROR: Title is required\n";
         return;
     }
-    
+   
     cout<<"Description: ";
     getline(cin, description);
-    
-    cout<<"Time Limit (minutes, > 0): ";
-    cin>>timeLimit;
+   
+    cout<<"Time Limit: ";
+    timeLimit = getIntInput();
     if(timeLimit <= 0)
     {
         cout<<"ERROR: Invalid time limit (must be > 0)\n";
         return;
     }
-    
+   
     Quiz newQuiz;
     newQuiz.id = id;
     newQuiz.title = title;
@@ -197,33 +262,33 @@ void createQuiz(const User& teacher)
     newQuiz.totalQuestions = 0;
     newQuiz.isActive = true;
     newQuiz.createdBy = teacher.username;
-    
+   
     quizzes.push_back(newQuiz);
     cout<<"Quiz created successfully! Quiz ID: "<<id<<"\n";
 }
+
 
 // ============== FR-03: Question Management ==============
 void createQuestion(const User& teacher)
 {
     cout<<"\n----- CREATE NEW QUESTION -----\n";
-    
+   
     if(quizzes.empty())
     {
         cout<<"ERROR: No quizzes available. Please create a quiz first.\n";
         return;
     }
-    
+   
     cout<<"Available Quizzes:\n";
     for(const auto& quiz : quizzes)
     {
         cout<<"ID: "<<quiz.id<<" - "<<quiz.title<<"\n";
     }
-    
+   
     int quizId;
     cout<<"Select Quiz ID: ";
-    cin>>quizId;
-    cin.ignore();
-    
+    quizId = getIntInput();
+   
     auto quiz = find_if(quizzes.begin(), quizzes.end(),
                     [quizId](const Quiz& q){ return q.id == quizId; });
     if(quiz == quizzes.end())
@@ -236,13 +301,12 @@ void createQuestion(const User& teacher)
         cout<<"ERROR: Quiz is not active\n";
         return;
     }
-    
+   
     Question q;
     q.quizId = quizId;
-    
+   
     cout<<"Question ID: ";
-    cin>>q.id;
-    cin.ignore();
+    q.id = getIntInput();
     for(const auto& question : quizQuestions)
     {
         if(question.id == q.id)
@@ -252,13 +316,13 @@ void createQuestion(const User& teacher)
         }
     }
     cout<<"Question text (required): ";
-    getline(cin, q.text);
+    getline(cin >> ws, q.text);
     if(q.text.empty())
     {
         cout<<"ERROR: Question content is required\n";
         return;
     }
-    
+   
     cout<<"Option A: ";
     getline(cin, q.A);
     cout<<"Option B: ";
@@ -267,27 +331,22 @@ void createQuestion(const User& teacher)
     getline(cin, q.C);
     cout<<"Option D: ";
     getline(cin, q.D);
-    
+   
     if(q.A.empty() || q.B.empty() || q.C.empty() || q.D.empty())
     {
         cout<<"ERROR: All options are required\n";
         return;
     }
-    
+   
     cout<<"Correct option (1-4): ";
-    cin>>q.correct;
-    
-    if(q.correct < 1 || q.correct > 4)
-    {
-        cout<<"ERROR: Correct option must be 1-4\n";
-        return;
-    }
-    
+    q.correct = getIntRange(1,4);
+   
     quizQuestions.push_back(q);
     quiz->totalQuestions++;
-    
+   
     cout<<"Question created successfully!\n";
 }
+
 
 // ============== FR-04 & FR-05: Take Quiz & Submit ==============
 void takeQuiz(User user,
@@ -295,23 +354,23 @@ void takeQuiz(User user,
             ResultService &resultService)
 {
     cout<<"\n----- TAKE QUIZ -----\n";
-    
+   
     if(quizzes.empty())
     {
         cout<<"ERROR: No quizzes available\n";
         return;
     }
-    
+   
     cout<<"Available Quizzes:\n";
     for(const auto& quiz : quizzes)
     {
         cout<<"ID: "<<quiz.id<<" - "<<quiz.title<<" ("<<quiz.totalQuestions<<" questions)\n";
     }
-    
+   
     int quizId;
     cout<<"Select Quiz ID: ";
-    cin>>quizId;
-    
+    quizId = getIntInput();
+   
     auto quiz = find_if(quizzes.begin(), quizzes.end(),
                     [quizId](const Quiz& q){ return q.id == quizId; });
     if(quiz == quizzes.end())
@@ -319,7 +378,12 @@ void takeQuiz(User user,
         cout<<"ERROR: Quiz not found\n";
         return;
     }
-    
+    if(!quiz->isActive)
+    {
+        cout<<"ERROR: Quiz is not active\n";
+        return;
+    }
+   
     // FR-14: Check attempt limit
     if(userAttemptCount[user.user_id] >=3)
     {
@@ -327,7 +391,7 @@ void takeQuiz(User user,
         return;
     }
     userAttemptCount[user.user_id]++;
-    
+   
     vector<Question> quizQuestionsList;
     for(const auto& q : quizQuestions)
     {
@@ -342,8 +406,9 @@ void takeQuiz(User user,
         cout<<"ERROR: Quiz has no questions\n";
         return;
     }
-    
+   
     int attemptId = attemptRecords.size() + 1;
+
 
     Attempt attempt =
         attemptService.startAttempt(
@@ -351,60 +416,54 @@ void takeQuiz(User user,
             user.user_id,
             quizId
         );
-    
+   
     auto start = steady_clock::now();
     int timeLimit = quiz->timeLimit * 60; // Convert to seconds
-    
+   
     // FR-09: Timer System
     cout<<"\nQuiz starts! Time limit: "<<quiz->timeLimit<<" minutes\n";
-    
+   
     for(auto &q : quizQuestionsList)
     {
         auto now = steady_clock::now();
         int elapsed = duration_cast<seconds>(now-start).count();
         int remaining = timeLimit - elapsed;
-        
+       
         if(remaining <= 0)
         {
             cout<<"\nERROR: Time is up - Quiz auto-submitted\n";
             break;
         }
-        
+       
         cout<<"\nTime remaining: "<<remaining<<" seconds\n";
         cout<<q.text<<"\n";
         cout<<"1. "<<q.A<<"\n";
         cout<<"2. "<<q.B<<"\n";
         cout<<"3. "<<q.C<<"\n";
         cout<<"4. "<<q.D<<"\n";
-        
-        int ans;
+       
         cout<<"Your answer (1-4, 0=skip): ";
-        cin>>ans;
-        
-        if(ans < 0 || ans > 4)
-        {
-            cout<<"Invalid answer - skipped\n";
-            continue;
-        }
+        int ans = getIntRange(0,4);
+       
         if(ans == 0)
         {
             cout<<"Question skipped\n";
             continue;
         }
-        
+       
         // FR-15: Auto Save
         if(ans > 0)
         {
             attemptService.saveAnswer(attempt, q.id, ans);
         }
     }
-    
+   
     attemptService.submitAttempt(attempt);
-    
+   
     // FR-06: Auto Grading & FR-07: View Result
     int score = attempt.getScore();
     int maxScore = quizQuestionsList.size();
-    
+   
     QuizAttemptRecord record;
     record.attemptId = attempt.getAttemptId();
     record.userId = user.user_id;
@@ -413,10 +472,12 @@ void takeQuiz(User user,
     record.maxScore = maxScore;
     record.attemptCount = userAttemptCount[user.user_id];
     time_t now = time(0);
-    record.submissionTime = ctime(&now); // Current time
-    
+    string timeStr = ctime(&now);
+    timeStr.pop_back(); // remove newline
+    record.submissionTime = timeStr;
+   
     attemptRecords.push_back(record);
-    
+   
     cout<<"\n===== QUIZ RESULT =====\n";
     cout<<"Quiz: "<<quiz->title<<"\n";
     cout<<"Score: "<<score<<"/"<<maxScore<<"\n";
@@ -424,29 +485,30 @@ void takeQuiz(User user,
     cout<<"=======================\n";
 }
 
+
 // ============== FR-07: View Results ==============
 void viewResults(const User& user)
 {
     cout<<"\n----- YOUR RESULTS -----\n";
-    
+   
     vector<QuizAttemptRecord> userRecords;
     for(const auto& record : attemptRecords)
     {
         if(record.userId == user.user_id)
             userRecords.push_back(record);
     }
-    
+   
     if(userRecords.empty())
     {
         cout<<"No results available\n";
         return;
     }
-    
+   
     for(const auto& record : userRecords)
     {
         auto quiz = find_if(quizzes.begin(), quizzes.end(),
-                           [record](const Quiz& q){ return q.id == record.quizId; });
-        
+                        [record](const Quiz& q){ return q.id == record.quizId; });
+       
         cout<<"\nAttempt #"<<record.attemptCount<<"\n";
         if(quiz != quizzes.end())
             cout<<"Quiz: "<<quiz->title<<"\n";
@@ -456,6 +518,7 @@ void viewResults(const User& user)
     }
 }
 
+
 // ============== FR-17: Reporting & Export ==============
 void generateReport(const User& admin)
 {
@@ -463,7 +526,7 @@ void generateReport(const User& admin)
     cout<<"Total Quizzes: "<<quizzes.size()<<"\n";
     cout<<"Total Questions: "<<quizQuestions.size()<<"\n";
     cout<<"Total Attempts: "<<attemptRecords.size()<<"\n";
-    
+   
     if(!attemptRecords.empty())
     {
         cout<<"\nAttempt Details:\n";
@@ -475,51 +538,48 @@ void generateReport(const User& admin)
     cout<<"=========================\n";
 }
 
+
 // ============== FR-12: Change Password ==============
-void changePassword(User& user, AuthService& authService)
+void changePassword(User& user, UserService& userService)
 {
     cout<<"\n----- CHANGE PASSWORD -----\n";
-    
-    string oldPassword, newPassword, confirmPassword;
-    
-    cout<<"Current Password: ";
-    cin>>oldPassword;
-    
-    // Verify old password (simplified)
-    if(oldPassword != user.password)
-    {
-        cout<<"ERROR: Incorrect current password\n";
-        return;
-    }
-    
+
+
+    string newPassword, confirmPassword;
+
+
     cout<<"New Password: ";
     cin>>newPassword;
-    
+
+
     if(!isValidPassword(newPassword))
     {
         cout<<"ERROR: Password must be at least 8 characters\n";
         return;
     }
-    
-    if(newPassword == oldPassword)
-    {
-        cout<<"ERROR: New password must be different from old password\n";
-        return;
-    }
-    
+
+
     cout<<"Confirm Password: ";
     cin>>confirmPassword;
-    
+
+
     if(newPassword != confirmPassword)
     {
         cout<<"ERROR: Passwords do not match\n";
         return;
     }
-    
-    user.password = newPassword;
-    cout<<"Password changed successfully!\n";
-}
 
+
+    try
+    {
+        userService.changePassword(user.user_id,newPassword);
+        cout<<"Password changed successfully!\n";
+    }
+    catch(const exception& e)
+    {
+        cout<<"ERROR: "<<e.what()<<"\n";
+    }
+}
 // ============== FR-22: User Profile Management ==============
 void viewProfile(const User& user)
 {
@@ -531,29 +591,29 @@ void viewProfile(const User& user)
     cout<<"========================\n";
 }
 
+
 void editProfile(User& user)
 {
     cout<<"\n----- EDIT PROFILE -----\n";
     cout<<"1. Change Email\n";
     cout<<"2. View Profile\n";
     cout<<"0. Cancel\n";
-    
+   
     int choice;
-    cin>>choice;
-    cin.ignore();
-    
+    choice = getIntRange(0,2);
+   
     if(choice == 1)
     {
         cout<<"New Email: ";
         string newEmail;
         getline(cin, newEmail);
-        
+       
         if(!isValidEmail(newEmail))
         {
             cout<<"ERROR: Invalid email format\n";
             return;
         }
-        
+       
         user.email = newEmail;
         cout<<"Email updated successfully!\n";
     }
@@ -563,38 +623,63 @@ void editProfile(User& user)
     }
 }
 
+
 // ============== FR-21: View Notifications ==============
 void viewNotifications(const User& user, NotificationService& notificationService)
 {
     cout<<"\n----- YOUR NOTIFICATIONS -----\n";
-    
+
+
     auto list = notificationService.getNotifications(user.user_id);
-    
+
+
     if(list.empty())
     {
         cout<<"No notifications available\n";
+        return;
     }
-    else
+
+
+    for(const auto &n : list)
     {
-        for(const auto &n : list)
+        cout<<"ID: "<<n.notification_id
+            <<" | "<<n.content
+            <<" | "<<(n.is_read ? "Read":"Unread")<<"\n";
+    }
+
+
+    cout<<"\nEnter notification ID to mark as read (0 to skip): ";
+
+
+    int id = getIntInput();
+
+
+    if(id != 0)
+    {
+        try
         {
-            cout<<"- "<<n.content<<" (Read: "<<(n.is_read ? "Yes" : "No")<<")\n";
+            notificationService.markAsRead(id);
+            cout<<"Notification marked as read\n";
+        }
+        catch(const exception& e)
+        {
+            cout<<"ERROR: "<<e.what()<<"\n";
         }
     }
-    cout<<"================================\n";
 }
+
 
 // ============== FR-08: Question Management Functions ==============
 void viewQuestions(const User& teacher)
 {
     cout<<"\n----- VIEW QUESTIONS -----\n";
-    
+   
     if(quizQuestions.empty())
     {
         cout<<"No questions available\n";
         return;
     }
-    
+   
     for(const auto& q : quizQuestions)
     {
         cout<<"\nQuestion ID: "<<q.id<<" (Quiz "<<q.quizId<<")\n";
@@ -604,34 +689,33 @@ void viewQuestions(const User& teacher)
     }
 }
 
+
 // FR-20: Edit Answer
 void editQuestion(const User& teacher)
 {
     cout<<"\n----- EDIT QUESTION -----\n";
-    
+   
     int questionId;
     cout<<"Enter Question ID: ";
-    cin>>questionId;
-    cin.ignore();
-    
+    questionId = getIntInput();
+   
     auto it = find_if(quizQuestions.begin(), quizQuestions.end(),
-                     [questionId](const Question& q){ return q.id == questionId; });
-    
+                    [questionId](const Question& q){ return q.id == questionId; });
+   
     if(it == quizQuestions.end())
     {
         cout<<"ERROR: Question not found\n";
         return;
     }
-    
+   
     cout<<"\n1. Edit Text\n";
     cout<<"2. Edit Options\n";
     cout<<"3. Edit Correct Answer\n";
     cout<<"0. Cancel\n";
-    
+   
     int choice;
-    cin>>choice;
-    cin.ignore();
-    
+    choice = getIntRange(0,3);
+   
     if(choice == 1)
     {
         cout<<"New question text: ";
@@ -653,23 +737,24 @@ void editQuestion(const User& teacher)
     else if(choice == 3)
     {
         cout<<"New Correct Answer (1-4): ";
-        cin>>it->correct;
+        it->correct = getIntRange(1,4);
         cout<<"Updated!\n";
     }
 }
+
 
 // FR-18: Delete Question
 void deleteQuestion(const User& teacher)
 {
     cout<<"\n----- DELETE QUESTION -----\n";
-    
+   
     int questionId;
     cout<<"Enter Question ID to delete: ";
-    cin>>questionId;
-    
+    questionId = getIntInput();
+   
     auto it = find_if(quizQuestions.begin(), quizQuestions.end(),
                     [questionId](const Question& q){ return q.id == questionId; });
-    
+   
     if(it == quizQuestions.end())
     {
         cout<<"ERROR: Question not found\n";
@@ -684,26 +769,31 @@ void deleteQuestion(const User& teacher)
     cout<<"Question deleted successfully!\n";
 }
 
+
 // ============== MAIN APPLICATION ==============
 int main()
 {
     UserRepositoryMemory userRepo;
     NotificationRepositoryMemory notificationRepo;
 
+
     AuthService authService(&userRepo);
     UserService userService(&userRepo);
     NotificationService notificationService(&notificationRepo);
+
 
     GradingService gradingService;
     ResultService resultService;
     AttemptService attemptService(&gradingService,&resultService);
 
+
     User currentUser;
     bool logged=false;
-    
+   
     cout<<"==============================================\n";
     cout<<"        QUIZ EXAMINATION SYSTEM v1.1         \n";
     cout<<"==============================================\n";
+
 
     while(true)
     {
@@ -711,9 +801,10 @@ int main()
         {
             guestMenu();
 
-            int c;
+
             cout<<"Select: ";
-            cin>>c;
+            int c = getIntRange(0,2);
+
 
             if(c==0)
             {
@@ -721,46 +812,54 @@ int main()
                 break;
             }
 
+
             if(c==1)
             {
                 cout<<"\n----- REGISTER NEW ACCOUNT -----\n";
-                
+               
                 int id;
                 string username,email,password,role;
 
+
                 cout<<"User ID: ";
-                cin>>id;
-                cin.ignore();
+                id = getIntInput();
+               
+
 
                 cout<<"Username: ";
                 getline(cin,username);
-                
+               
                 if(!isValidUsername(username))
                 {
                     cout<<"ERROR: Username must be at least 3 characters\n";
                     continue;
                 }
 
+
                 cout<<"Email: ";
                 getline(cin,email);
-                
+               
                 if(!isValidEmail(email))
                 {
                     cout<<"ERROR: Invalid email format\n";
                     continue;
                 }
 
+
                 cout<<"Password: ";
                 cin>>password;
-                
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+               
                 if(!isValidPassword(password))
                 {
                     cout<<"ERROR: Password must be at least 8 characters\n";
                     continue;
                 }
 
+
                 cout<<"Role(student/teacher/admin): ";
                 cin>>role;
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 if(role!="student" && role!="teacher" && role!="admin")
                 {
                     cout<<"ERROR: Invalid role\n";
@@ -768,7 +867,9 @@ int main()
                     continue;
                 }
 
+
                 User u(id,username,email,password,role,true);
+
 
                 try
                 {
@@ -783,17 +884,21 @@ int main()
                 }
             }
 
+
             else if(c==2)
             {
                 cout<<"\n----- LOGIN -----\n";
-                
+               
                 string u,p;
+
 
                 cout<<"Username: ";
                 cin>>u;
 
+
                 cout<<"Password: ";
                 cin>>p;
+
 
                 try
                 {
@@ -810,6 +915,7 @@ int main()
             }
         }
 
+
         else
         {
             // FR-11: Role-based Access Control
@@ -817,29 +923,34 @@ int main()
             {
                 studentMenu();
 
-                int c;
+
                 cout<<"Select: ";
-                cin>>c;
+                int c = getIntRange(1,6);
+
 
                 if(c==1){
                     takeQuiz(currentUser, attemptService, resultService);
                     pauseScreen();
                 }
 
+
                 else if(c==2){
                     viewResults(currentUser);
                     pauseScreen();
                 }
+
 
                 else if(c==3){
                     viewNotifications(currentUser, notificationService);
                     pauseScreen();
                 }
 
+
                 else if(c==4){
-                    changePassword(currentUser, authService);
+                    changePassword(currentUser, userService);
                     pauseScreen();
                 }
+
 
                 else if(c==5){
                     viewProfile(currentUser);
@@ -852,38 +963,45 @@ int main()
                 }
             }
 
+
             else if(currentUser.role=="teacher")
             {
                 teacherMenu();
 
-                int c;
+
                 cout<<"Select: ";
-                cin>>c;
+                int c = getIntRange(1,10);
+
 
                 if(c==1){
                     createQuiz(currentUser);
                     pauseScreen();
                 }
 
+
                 else if(c==2){
                     createQuestion(currentUser);
                     pauseScreen();
                 }
+
 
                 else if(c==3){
                     viewQuestions(currentUser);
                     pauseScreen();
                 }
 
+
                 else if(c==4){
                     editQuestion(currentUser);
                     pauseScreen();
                 }
 
+
                 else if(c==5){
                     deleteQuestion(currentUser);
                     pauseScreen();
                 }
+
 
                 else if(c==6)
                 {
@@ -894,6 +1012,7 @@ int main()
                     }
                     pauseScreen();
                 }
+
 
                 else if(c==7)
                 {
@@ -912,29 +1031,33 @@ int main()
                     pauseScreen();
                 }
 
+
                 else if(c==8)
                 {
                     int userId;
                     string msg;
-                    
+                   
                     cout<<"User ID to notify: ";
-                    cin>>userId;
-                    cin.ignore();
+                    userId = getIntInput();
+
 
                     cout<<"Message: ";
                     getline(cin,msg);
 
+
                     Notification n(0,userId,msg);
                     notificationService.sendNotification(n);
-                    
+                   
                     cout<<" Notification sent!\n";
                     pauseScreen();
                 }
 
+
                 else if(c==9){
-                    changePassword(currentUser, authService);
+                    changePassword(currentUser, userService);
                     pauseScreen();
                 }
+
 
                 else if(c==10)
                 {
@@ -943,29 +1066,34 @@ int main()
                 }
             }
 
+
             else if(currentUser.role=="admin")
             {
                 adminMenu();
 
-                int c;
+
                 cout<<"Select: ";
-                cin>>c;
+                int c = getIntRange(1,5);
+
 
                 if(c==1)
                 {
                     cout<<"\nAll Users (stored in repository):\n";
                 }
 
+
                 else if(c==2)
                 {
                     cout<<"\nUser management would delete users from repository\n";
                 }
+
 
                 else if(c==3)
                 {
                     generateReport(currentUser);
                     pauseScreen();
                 }
+
 
                 else if(c==4)
                 {
@@ -978,6 +1106,7 @@ int main()
                     pauseScreen();
                 }
 
+
                 else if(c==5)
                 {
                     logged=false;
@@ -987,6 +1116,10 @@ int main()
         }
     }
 
+
     cout<<"\n System shutdown complete.\n";
     return 0;
 }
+
+
+

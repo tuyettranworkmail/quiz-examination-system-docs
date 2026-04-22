@@ -19,13 +19,13 @@ public:
 
     // constructor đầy đủ
     Notification(int id,
-                 int userId,
-                 const std::string& content)
+                int userId,
+                const std::string& content)
         : notification_id(id),
-          user_id(userId),
-          content(content),
-          created_at(std::time(nullptr)),
-          is_read(false)
+        user_id(userId),
+        content(content),
+        created_at(std::time(nullptr)),
+        is_read(false)
     {}
 
     // mark read
