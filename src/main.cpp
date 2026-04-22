@@ -888,7 +888,6 @@ int main()
             else if(c==2)
             {
                 cout<<"\n----- LOGIN -----\n";
-               
                 string u,p;
 
 
@@ -1036,7 +1035,6 @@ int main()
                 {
                     int userId;
                     string msg;
-                   
                     cout<<"User ID to notify: ";
                     userId = getIntInput();
 
@@ -1047,7 +1045,6 @@ int main()
 
                     Notification n(0,userId,msg);
                     notificationService.sendNotification(n);
-                   
                     cout<<" Notification sent!\n";
                     pauseScreen();
                 }
